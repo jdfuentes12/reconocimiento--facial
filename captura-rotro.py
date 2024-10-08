@@ -2,7 +2,7 @@ import cv2
 import os
 import imutils
 
-personName = 'Jose'
+personName = 'Kevin'
 dataPath = 'c:/Users/jose2/OneDrive/Documentos/reconocimiento--facial/faces' #Cambia a la ruta donde hayas almacenado Data
 personPath = dataPath + '/' + personName
 

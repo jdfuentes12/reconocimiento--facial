@@ -30,9 +30,32 @@ class ListaProfesores():
 
     def mostrar_profesores(self):
         current = self.heard
+        if current == None:
+            print('No hay profesores registrados')
+        else:
+            while current is not None:
+                print(f'ID: {current.id}, Nombre: {current.nombre}, Contraseña: {current.password}')
+                current = current.next
+    
+    def tamanio(self):
+        return self.size
+    
+    def buscar_profesor(self, id):
+        current = self.heard
         while current is not None:
-            print(f'ID: {current.id}, Nombre: {current.nombre}')
+            if current.id == id:
+                return current
             current = current.next
+        return None
+    
+    def buscar_nombre_password(self, nombre, password):
+        current = self.heard
+        while current is not None:
+            if current.nombre == nombre and current.password == password:
+                return current
+            current = current.next
+        return None
+    
 
 # ------------ ESTRUCTURA PARA LOS CURSOS ------------
 
