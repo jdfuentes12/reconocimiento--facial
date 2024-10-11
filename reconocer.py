@@ -2,7 +2,8 @@ import cv2
 import os
 
 # Ruta a la carpeta donde se almacenan las imágenes de rostros
-dataPath = 'c:/Users/jose2/OneDrive/Documentos/reconocimiento--facial/faces'  # Cambia a la ruta donde hayas almacenado Data
+dataPath = 'faces/jose'  # Cambia a la ruta donde hayas almacenado Data
+# colocarles el faces/ y agregarle el nombre de cada uno de los profesores
 imagePaths = os.listdir(dataPath)
 print('imagePaths=', imagePaths)
 
@@ -12,7 +13,7 @@ face_recognizer = cv2.face.LBPHFaceRecognizer_create()
 face_recognizer.read('modeloLBPHFace.xml')
 
 # Abre la cámara
-cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)  # Cambia a 1 si usas otra cámara
+cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # Cambia a 1 si usas otra cámara
 
 # Carga el clasificador de rostros
 faceClassif = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')

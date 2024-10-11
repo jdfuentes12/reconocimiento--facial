@@ -15,7 +15,7 @@ class main():
         self.menu.title("Menu")
         self.menu.resizable(0,0)
         self.menu.geometry("400x200")
-        ListaProfesores.agregar_profesor("jose","123")
+        #ListaProfesores.agregar_profesor("jose","123")
         self.container()
 
     def container(self):
@@ -154,13 +154,13 @@ class Admin():
     
     def registrar(self):
         self.admin.destroy()
-        agregar()
+        agregar_Profesor()
     
     def ver_profesores(self):
         self.admin.destroy()
         ver_profesores()
 
-class agregar():
+class agregar_Profesor():
     def __init__(self): 
         
         self.agregar = Tk()
@@ -178,23 +178,23 @@ class agregar():
         nombre_label.place(x=10, y=10)
         nombre_label.config(font=("Consolas", 13))
 
-        password_label = Label(self.frame, text="Password:")
+        password_label = Label(self.frame, text="Usuario:")
         password_label.place(x=10, y=50)
         password_label.config(font=("Consolas", 13))
 
-        password_label = Label(self.frame, text="Confirmar:")
+        password_label = Label(self.frame, text="Password:")
         password_label.place(x=10, y=90)
         password_label.config(font=("Consolas", 13))
 
         # Entry fields
-        self.nombre_entry = Entry(self.frame, font=("Consolas", 12))
-        self.nombre_entry.place(x=150, y=10)
+        self.nombre = Entry(self.frame, font=("Consolas", 12))
+        self.nombre.place(x=150, y=10)
 
-        self.password_entry = Entry(self.frame, font=("Consolas", 12),show="*")
-        self.password_entry.place(x=150, y=50)
+        self.usuario = Entry(self.frame, font=("Consolas", 12))
+        self.usuario.place(x=150, y=50)
 
-        self.password_confir_entry = Entry(self.frame, font=("Consolas", 12),show="*")
-        self.password_confir_entry.place(x=150, y=90)
+        self.password = Entry(self.frame, font=("Consolas", 12),show="*")
+        self.password.place(x=150, y=90)
 
         # Buttons
         botonRegistrar = Button(self.frame, bg="#5ed1fa", font=("Consolas", 12), text="Registrar", command=self.registrar)
@@ -206,21 +206,16 @@ class agregar():
         self.frame.mainloop()
 
     def registrar(self):
-        nombre = self.nombre_entry.get()
-        password = self.password_entry.get()
-        confirmar = self.password_confir_entry.get()
+        nombre = self.nombre.get()
+        usuario = self.usuario.get()
+        password = self.password.get()
 
-        if nombre and password and confirmar:
-            if password != confirmar:
-                messagebox.showerror("Error de registro", "Las contraseñas no coinciden")
-                self.password_entry.delete(0, END)
-                self.password_confir_entry.delete(0, END)
-                return
-            ListaProfesores.agregar_profesor(nombre, password)
+        if nombre and usuario and password:
+            ListaProfesores.agregar_profesor(nombre, password,usuario)
             messagebox.showinfo("Registro exitoso", "Profesor registrado correctamente")
-            self.nombre_entry.delete(0, END)
-            self.password_entry.delete(0, END)
-            self.password_confir_entry.delete(0, END)
+            self.nombre.delete(0, END)
+            self.usuario.delete(0, END)
+            self.password.delete(0, END)
             ListaProfesores.mostrar_profesores()
         else:
             messagebox.showerror("Error de registro", "Todos los campos son obligatorios")
@@ -234,16 +229,17 @@ class ver_profesores():
         self.ver_profesores = Tk()
         self.ver_profesores.title("Lista de Profesores")
         self.ver_profesores.resizable(0, 0)
-        self.ver_profesores.geometry("500x350")
+        self.ver_profesores.geometry("700x350")
         self.container()
 
     def container(self):
-        self.frame = Frame(height=350, width=500)
+        self.frame = Frame(height=350, width=700)
         self.frame.pack(padx=25, pady=25)
 
         # Treeview
-        self.tree = ttk.Treeview(self.frame, columns=("Nombre", "Password"), show='headings')
-        self.tree.heading("Nombre", text="Nombre")
+        self.tree = ttk.Treeview(self.frame, columns=("Nombre","Usuario", "Password"), show='headings')
+        self.tree.heading("Nombre",text="Nombre")
+        self.tree.heading("Usuario", text="Usuario")
         self.tree.heading("Password", text="Password")
         self.tree.pack(fill=BOTH, expand=True)
 
@@ -259,10 +255,11 @@ class ver_profesores():
         else: 
             for i in range(1, tamanio + 1):
                 profesor = ListaProfesores.buscar_profesor(i)
-                self.tree.insert("", "end", values=(profesor.nombre, profesor.password))
+                self.tree.insert("", "end", values=(profesor.nombre,profesor.usuario, profesor.password))
         
         # Centrar el contenido de la lista
         self.tree.column("Nombre", anchor=CENTER)
+        self.tree.column("Usuario", anchor=CENTER)
         self.tree.column("Password", anchor=CENTER)
 
         self.frame.mainloop()
@@ -297,7 +294,7 @@ class Profesor():
         botonAgregar = Button(self.frame, bg="#5ed1fa", font=("Consolas", 12), text="Registrar estudiante",command=self.registrarEstudiantes)
         botonAgregar.place(x=90, y=50)
 
-        botonVer = Button(self.frame, bg="#5ed1fa", font=("Consolas", 12), text="Ver estudiantes")
+        botonVer = Button(self.frame, bg="#5ed1fa", font=("Consolas", 12), text="Ver estudiantes",command=self.verEstudiantes)
         botonVer.place(x=110, y=100)
 
         botonAsistencia = Button(self.frame, bg="#5ed1fa", font=("Consolas", 12), text="Asistencia")
@@ -315,6 +312,10 @@ class Profesor():
     def registrarEstudiantes(self):
         self.profesor.destroy()
         Registrar_Estudiante(self.nodoprofesor)
+    
+    def verEstudiantes(self):
+        self.profesor.destroy()
+        Ver_Estudiantes(self.nodoprofesor)
 
 class Registrar_Estudiante:
     def __init__(self,nodoProfesor):
@@ -411,7 +412,50 @@ class Registrar_Estudiante:
     def regresar(self):
         self.registrar_estudiante.destroy()
         Profesor(self.nodoProfesor)
+        
+class Ver_Estudiantes:
+    def __init__(self, nodoProfesor):
+        self.ver_estudiantes = Tk()
+        self.ver_estudiantes.title("Lista de Estudiantes")
+        self.ver_estudiantes.resizable(0, 0)
+        self.ver_estudiantes.geometry("500x350")
+        self.nodoProfesor = nodoProfesor
+        self.container()
 
+    def container(self):
+        self.frame = Frame(height=350, width=500)
+        self.frame.pack(padx=25, pady=25)
+
+        # Treeview
+        self.tree = ttk.Treeview(self.frame, columns=("Nombre", "Carné"), show='headings')
+        self.tree.heading("Nombre", text="Nombre")
+        self.tree.heading("Carné", text="Carné")
+        self.tree.pack(fill=BOTH, expand=True)
+
+        # Botón de regresar
+        botonSalir = Button(self.frame, bg="#5ed1fa", font=("Consolas", 12), text="Regresar", command=self.regresar)
+        botonSalir.pack(pady=10)
+
+        # Insertar datos en la tabla
+        tamanio = self.nodoProfesor.estudiantes.tamanio()
+        print(tamanio)
+
+        if tamanio == 0:
+            messagebox.showerror("Advertencia", "No hay estudiantes registrados")
+        else:
+            for i in range(1, tamanio + 1):
+                estudiante = self.nodoProfesor.estudiantes.buscar_estudiante(i)
+                self.tree.insert("", "end", values=(estudiante.nombre, estudiante.carne))
+
+        # Centrar el contenido de la lista
+        self.tree.column("Nombre", anchor=CENTER)
+        self.tree.column("Carné", anchor=CENTER)
+
+        self.frame.mainloop()
+
+    def regresar(self):
+        self.ver_estudiantes.destroy()
+        Profesor(self.nodoProfesor)
 
 # INICIAR EL MAIN DEL PROGRAMA
 if __name__ == '__main__':

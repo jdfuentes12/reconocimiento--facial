@@ -1,9 +1,10 @@
 # ------------ ESTRUCTURA PARA LOS PROFESORES ------------
 
 class Profesores():
-    def __init__(self, nombre, password):
+    def __init__(self, nombre, password,usuario):
         self.nombre = nombre
         self.password = password
+        self.usuario = usuario
         self.cursos = ListaCuros()
         self.estudiantes = ListaEstudiantes()
         self.next = None
@@ -15,8 +16,8 @@ class ListaProfesores():
         self.id = 1
         self.size = 0
     
-    def agregar_profesor(self, nombre, password):
-        nuevo_profesor = Profesores(nombre, password)
+    def agregar_profesor(self, nombre, password,usuario):
+        nuevo_profesor = Profesores(nombre, password,usuario)
         nuevo_profesor.id = self.id
         self.id += 1
         if self.heard is None:
@@ -34,7 +35,7 @@ class ListaProfesores():
             print('No hay profesores registrados')
         else:
             while current is not None:
-                print(f'ID: {current.id}, Nombre: {current.nombre}, Contraseña: {current.password}')
+                print(f'ID: {current.id}, Nombre: {current.nombre}, Usuario: {current.usuario}, Contraseña: {current.password}')
                 current = current.next
     
     def tamanio(self):
@@ -48,10 +49,10 @@ class ListaProfesores():
             current = current.next
         return None
     
-    def buscar_nombre_password(self, nombre, password):
+    def buscar_nombre_password(self, usuario, password):
         current = self.heard
         while current is not None:
-            if current.nombre == nombre and current.password == password:
+            if current.usuario == usuario and current.password == password:
                 return current
             current = current.next
         return None
@@ -108,6 +109,8 @@ class ListaEstudiantes:
 
     def insertar_estudiante(self, nombre, carne):
         nuevo_estudiante = Estudiantes(nombre, carne)
+        nuevo_estudiante.id = self.id
+        self.id += 1
         if not self.heard:
             self.heard = nuevo_estudiante
         else:
@@ -123,3 +126,13 @@ class ListaEstudiantes:
             print(f"Nombre: {actual.nombre}, Carné: {actual.carne}")
             actual = actual.next
 
+    def tamanio(self):
+        return self.size
+    
+    def buscar_estudiante(self, id):
+        current = self.heard
+        while current is not None:
+            if current.id == id:
+                return current
+            current = current.next
+        return None
